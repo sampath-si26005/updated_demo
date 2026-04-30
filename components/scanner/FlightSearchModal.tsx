@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Modal, FlatList, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 interface Flight {
   id: string;
@@ -29,7 +30,19 @@ interface FlightSearchModalProps {
 }
 
 export default function FlightSearchModal({ visible, onClose }: FlightSearchModalProps) {
-  
+  const router = useRouter();
+
+  const handleSelect = (flight: Flight) => {
+    onClose();
+    router.push({
+      pathname: '/gate',
+      params: {
+        flightNo: flight.flightNo,
+        destination: flight.destination,
+        departure: flight.departure
+      }
+    });
+  };
   const renderItem = ({ item, index }: { item: Flight; index: number }) => {
     return (
       <View style={[styles.row, index % 2 !== 0 && styles.rowAlt]}>
@@ -39,7 +52,7 @@ export default function FlightSearchModal({ visible, onClose }: FlightSearchModa
         <Text style={[styles.cell, styles.colAirline]}>{item.airline}</Text>
         <Text style={[styles.cell, styles.colFlight]}>{item.flightNo}</Text>
         <View style={styles.colAction}>
-          <Pressable style={styles.selectBtn}>
+          <Pressable style={styles.selectBtn} onPress={() => handleSelect(item)}>
             <Text style={styles.selectBtnText}>Select</Text>
           </Pressable>
         </View>
