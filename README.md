@@ -1,50 +1,62 @@
-# Welcome to your Expo app 👋
+# Premium Airport Kiosk Interface (SmartTrolley)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A high-end, editorial-style React Native application designed for next-generation airport kiosks. This project transforms the standard kiosk experience into a luxury digital magazine interface, prioritizing aesthetic excellence, sophisticated typography, and immersive imagery.
 
-## Get started
+## 🌟 Key Features
 
-1. Install dependencies
+### 1. Luxury Landing Page
+- **Asymmetrical Split-Screen Layout**: A dynamic hero section featuring high-end promotions and intuitive navigation.
+- **Premium Typography**: Integration of `Playfair Display` for headlines and `Inter` for clean, readable body text.
+- **Dynamic Promotions**: Curated hero banners with realistic photography and smooth transitions.
 
+### 2. Editorial Dining & Shopping Directory
+- **Image-First Layouts**: Full-bleed card designs that emphasize food photography and luxury retail branding.
+- **Floating Overlays**: Sophisticated text overlays with dark gradients for maximum legibility without clutter.
+- **Glassmorphism CTAs**: Premium buttons featuring translucent backgrounds, subtle borders, and gold-accented navigation cues.
+
+### 3. High-End Lounge Previews
+- **Realistic Imagery**: Immersive, high-definition previews of first-class and business lounges.
+- **Curated Details**: Clear presentation of amenities, access status, and location within an elegant grid.
+
+### 4. Sophisticated Design System
+- **Gold Accent Palette**: Use of `#C9A96E` for premium highlights, ratings, and call-to-actions.
+- **Deep Navy & Off-White**: A refined color palette of `#0D1F35` and `#F7F5F2` to create a calm, premium environment.
+- **Refined Spacing**: Minimalist approach avoiding heavy cards or boxes in favor of white space and typography.
+
+## 🛠️ Tech Stack
+- **Framework**: React Native (via Expo)
+- **Navigation**: Expo Router (File-based routing)
+- **Styling**: Vanilla StyleSheet with Flexbox
+- **Typography**: Google Fonts (Playfair Display, Inter)
+- **Icons**: Ionicons (Vector Icons)
+- **Animations**: Expo Linear Gradient & React Native Reanimated
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (Latest LTS)
+- npm or yarn
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sampath-si26005/updated_demo.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd updated_demo
+   ```
+3. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### Running the Application
+To start the development server and view the project in your browser:
 ```bash
-npm run reset-project
+npm run web
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+*Designed and Developed for Advanced Agentic Coding - Premium Airport Kiosk Redesign.*
