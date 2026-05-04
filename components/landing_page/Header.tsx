@@ -3,10 +3,16 @@
  * Functionality unchanged: displays airport name + live time.
  */
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, usePathname } from 'expo-router';
 
 export default function Header() {
   const [timeStr, setTimeStr] = useState('');
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const isInitialScreen = pathname === '/' || pathname === '/index';
 
   useEffect(() => {
     const tick = () => {
@@ -27,7 +33,17 @@ export default function Header() {
           <View style={styles.dot} />
           <Text style={styles.brand}>Chennai International Airport</Text>
         </View>
-        <Text style={styles.clock}>{timeStr}</Text>
+        
+        <View style={styles.rightSection}>
+          <Text style={styles.clock}>{timeStr}</Text>
+          {!isInitialScreen && (
+            <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} activeOpacity={0.7}>
+              <View style={styles.backArrowCircle}>
+                <Ionicons name="arrow-back" size={16} color="#C9A96E" />
+              </View>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -48,6 +64,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 32,
+  },
+  rightSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+  },
+  backBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backArrowCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(201, 169, 110, 0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
   },
   brandRow: {
     flexDirection: 'row',

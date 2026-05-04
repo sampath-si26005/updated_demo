@@ -74,10 +74,6 @@ export default function FoodPage() {
     <PageLayout hideHeader={false}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#2D3748" />
-            <Text style={styles.backText}>Back</Text>
-          </TouchableOpacity>
           <Text style={styles.title}>Food & Dining Outlets</Text>
         </View>
 
@@ -120,26 +116,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7FAFC',
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
     padding: 24,
+    paddingHorizontal: 32,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E2E8F0',
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 20,
-    padding: 8,
-    borderRadius: 8,
-    backgroundColor: '#EDF2F7',
-  },
-  backText: {
-    marginLeft: 6,
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2D3748',
   },
   title: {
     fontFamily: 'PlayfairDisplay_700Bold',
