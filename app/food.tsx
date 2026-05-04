@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import PageLayout from '../components/landing_page/PageLayout';
 import { foodOutlets, FoodOutlet } from '../mock/food';
 
@@ -17,7 +18,12 @@ export default function FoodPage() {
 
   const renderFoodItem = ({ item }: { item: FoodOutlet }) => (
     <View style={styles.card}>
-      <View style={styles.cardContent}>
+      {item.imageUrl && (
+        <Image source={{ uri: item.imageUrl }} style={styles.cardImage} resizeMode="cover" />
+      )}
+      <View style={styles.imageOverlay} />
+      
+      <View style={styles.cardContentOverlay}>
         <View style={styles.headerRow}>
           <Text style={styles.name}>{item.name}</Text>
           <View style={[
@@ -37,19 +43,28 @@ export default function FoodPage() {
         
         <View style={styles.footerRow}>
           <View style={styles.infoTag}>
-            <Ionicons name="location-outline" size={16} color="#718096" />
+            <Ionicons name="location-outline" size={16} color="#E2E8F0" />
             <Text style={styles.infoText}>{item.distance}</Text>
           </View>
           
           <View style={styles.ratingBadge}>
-            <Ionicons name="star" size={14} color="#D69E2E" />
+            <Ionicons name="star" size={14} color="#C9A96E" />
             <Text style={styles.ratingText}>{item.rating}</Text>
           </View>
         </View>
 
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Navigate Here</Text>
-          <Ionicons name="navigate-outline" size={18} color="#FFFFFF" />
+        <TouchableOpacity style={styles.actionButton} activeOpacity={0.8}>
+          <LinearGradient
+            colors={['rgba(255,255,255,0.15)', 'rgba(255,255,255,0.05)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.actionButtonGradient}
+          >
+            <Text style={styles.actionButtonText}>Navigate Here</Text>
+            <View style={styles.actionButtonArrowCircle}>
+              <Text style={styles.actionButtonArrow}>→</Text>
+            </View>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
     </View>
@@ -127,9 +142,9 @@ const styles = StyleSheet.create({
     color: '#2D3748',
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2D3748',
+    fontFamily: 'PlayfairDisplay_700Bold',
+    fontSize: 32,
+    color: '#0D1F35',
   },
   filterContainer: {
     backgroundColor: '#FFFFFF',
@@ -170,30 +185,43 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    elevation: 3,
+    backgroundColor: '#000',
+    borderRadius: 20,
+    height: 340,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 8,
+    position: 'relative',
   },
-  cardContent: {
+  cardImage: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.8,
+  },
+  imageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+  },
+  cardContentOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     padding: 20,
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'baseline',
     marginBottom: 8,
   },
   name: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#2D3748',
+    fontFamily: 'PlayfairDisplay_700Bold',
+    fontSize: 24,
+    color: '#FFFFFF',
     flex: 1,
     marginRight: 12,
   },
@@ -225,8 +253,9 @@ const styles = StyleSheet.create({
     color: '#822727',
   },
   category: {
+    fontFamily: 'Inter_400Regular',
     fontSize: 16,
-    color: '#718096',
+    color: '#CBD5E0',
     marginBottom: 16,
   },
   footerRow: {
@@ -238,43 +267,62 @@ const styles = StyleSheet.create({
   infoTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EDF2F7',
+    backgroundColor: 'rgba(255,255,255,0.1)',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
   },
   infoText: {
+    fontFamily: 'Inter_600SemiBold',
     marginLeft: 6,
     fontSize: 14,
-    fontWeight: '600',
-    color: '#4A5568',
+    color: '#E2E8F0',
   },
   ratingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEFCBF',
+    backgroundColor: 'rgba(201, 169, 110, 0.15)',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
   },
   ratingText: {
+    fontFamily: 'Inter_700Bold',
     marginLeft: 4,
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#975A16',
+    color: '#C9A96E',
   },
   actionButton: {
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  actionButtonGradient: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#3182CE',
-    paddingVertical: 14,
-    borderRadius: 10,
-    gap: 8,
+    paddingVertical: 12,
+    gap: 12,
   },
   actionButtonText: {
+    fontFamily: 'Inter_600SemiBold',
     color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 15,
+    letterSpacing: 0.5,
+  },
+  actionButtonArrowCircle: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 1,
+    borderColor: 'rgba(201, 169, 110, 0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionButtonArrow: {
+    color: '#C9A96E',
+    fontSize: 11,
   },
 });

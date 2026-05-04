@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { shoppingOutlets } from '../../../mock/shopping';
 
 export default function ShoppingPreviewList() {
@@ -17,16 +18,24 @@ export default function ShoppingPreviewList() {
       
       <ScrollView style={styles.listContainer} contentContainerStyle={styles.listContent}>
         {previewItems.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.shoppingItem} activeOpacity={0.7}>
-            <View style={styles.itemHeader}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemDistance}>{item.distance}</Text>
-            </View>
-            <View style={styles.itemDetails}>
-              <Text style={styles.itemCategory}>{item.category}</Text>
-              <View style={styles.ratingContainer}>
-                <Ionicons name="star" size={14} color="#D69E2E" />
-                <Text style={styles.ratingText}>{item.rating}</Text>
+          <TouchableOpacity key={item.id} style={styles.shoppingItem} activeOpacity={0.8}>
+            {item.imageUrl && (
+              <Image source={{ uri: item.imageUrl }} style={styles.itemImage} resizeMode="cover" />
+            )}
+            <View style={styles.imageOverlay} />
+            
+            <View style={styles.itemContentOverlay}>
+              <View style={styles.itemHeader}>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemDistance}>{item.distance}</Text>
+              </View>
+              
+              <View style={styles.itemFooterRow}>
+                <Text style={styles.itemCategory}>{item.category}</Text>
+                <View style={styles.ratingContainer}>
+                  <Ionicons name="star" size={12} color="#C9A96E" />
+                  <Text style={styles.ratingText}>{item.rating}</Text>
+                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -39,8 +48,17 @@ export default function ShoppingPreviewList() {
           activeOpacity={0.8}
           onPress={() => router.push('/shopping')}
         >
-          <Text style={styles.viewMoreText}>View All Shops</Text>
-          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+          <LinearGradient
+            colors={['#1E3A5F', '#0D1F35']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.viewMoreGradient}
+          >
+            <Text style={styles.viewMoreText}>View All Shops</Text>
+            <View style={styles.viewMoreArrowCircle}>
+              <Text style={styles.viewMoreArrow}>→</Text>
+            </View>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
     </View>
@@ -58,9 +76,9 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2D3748',
+    fontFamily: 'PlayfairDisplay_700Bold',
+    fontSize: 24,
+    color: '#0D1F35',
   },
   listContainer: {
     flex: 1,
@@ -70,51 +88,63 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   shoppingItem: {
-    backgroundColor: '#F7FAFC',
-    borderRadius: 12,
+    borderRadius: 16,
+    marginBottom: 16,
+    overflow: 'hidden',
+    height: 200,
+    backgroundColor: '#000',
+  },
+  itemImage: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.85,
+  },
+  imageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  itemContentOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
   },
   itemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+    alignItems: 'baseline',
+    marginBottom: 4,
   },
   itemName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2D3748',
+    fontFamily: 'PlayfairDisplay_700Bold',
+    fontSize: 22,
+    color: '#FFFFFF',
   },
   itemDistance: {
-    fontSize: 14,
-    color: '#718096',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
+    fontSize: 12,
+    color: '#E2E8F0',
   },
-  itemDetails: {
+  itemFooterRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   itemCategory: {
-    fontSize: 14,
-    color: '#4A5568',
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: '#CBD5E0',
   },
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEFCBF',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    gap: 4,
   },
   ratingText: {
-    marginLeft: 4,
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#B7791F',
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 13,
+    color: '#C9A96E',
   },
   footer: {
     padding: 16,
@@ -123,17 +153,38 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   viewMoreButton: {
-    backgroundColor: '#3182CE',
+    borderRadius: 8,
+    shadowColor: '#0D1F35',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  viewMoreGradient: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 14,
     borderRadius: 8,
-    gap: 8,
+    gap: 12,
   },
   viewMoreText: {
-    color: '#FFFFFF',
+    fontFamily: 'Inter_600SemiBold',
+    color: '#EDE9E3',
     fontSize: 16,
-    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
+  viewMoreArrowCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(201, 169, 110, 0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  viewMoreArrow: {
+    color: '#C9A96E',
+    fontSize: 12,
   },
 });

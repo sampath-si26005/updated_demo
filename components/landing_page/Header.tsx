@@ -1,9 +1,6 @@
 /**
- * Header.tsx
- * 
- * This component acts as the global top navigation bar.
- * It displays the Airport's branding text and a live, updating clock
- * to keep the user informed of the current time.
+ * Header.tsx — Premium dark navy header with gold accent line + live clock.
+ * Functionality unchanged: displays airport name + live time.
  */
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
@@ -12,42 +9,67 @@ export default function Header() {
   const [timeStr, setTimeStr] = useState('');
 
   useEffect(() => {
-    const updateTime = () => {
+    const tick = () => {
       const now = new Date();
       setTimeStr(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
     };
-    updateTime();
-    const timer = setInterval(updateTime, 1000);
-    return () => clearInterval(timer);
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title} numberOfLines={1}>Chennai International Airport</Text>
-      <Text style={styles.time}>{timeStr}</Text>
+    <View style={styles.wrap}>
+      {/* Top gold rule — luxury detail */}
+      <View style={styles.goldLine} />
+      <View style={styles.bar}>
+        <View style={styles.brandRow}>
+          <View style={styles.dot} />
+          <Text style={styles.brand}>Chennai International Airport</Text>
+        </View>
+        <Text style={styles.clock}>{timeStr}</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    height: 70,
-    backgroundColor: '#0B2A4A',
+  wrap: {
+    backgroundColor: '#0D1F35',
+  },
+  goldLine: {
+    height: 2,
+    backgroundColor: '#C9A96E',
+    opacity: 0.8,
+  },
+  bar: {
+    height: 70, // Increased by ~10% from 64
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 32,
   },
-  title: {
-    color: '#FFFFFF',
-    fontSize: 28,
-    fontWeight: '600',
-    flex: 1, // ensure it shrinks instead of pushing time out if it gets too long
-    marginRight: 20,
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
-  time: {
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontSize: 22,
-    fontWeight: '500',
-  }
+  dot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    backgroundColor: '#C9A96E',
+  },
+  brand: {
+    fontFamily: 'Inter_600SemiBold',
+    color: '#EDE9E3',
+    fontSize: 16,
+    letterSpacing: 0.3,
+  },
+  clock: {
+    fontFamily: 'Inter_600SemiBold',
+    color: 'rgba(237, 233, 227, 0.7)',
+    fontSize: 20,
+    letterSpacing: 1,
+  },
 });

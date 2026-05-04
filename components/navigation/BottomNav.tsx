@@ -20,59 +20,86 @@ export default function BottomNav({ onNavPress, activeId }: BottomNavProps) {
   ];
 
   return (
-    <View style={styles.container}>
-      {navItems.map((item) => {
-        const isActive = activeId === item.id;
-        // Make the exit button stand out slightly by not treating it like normal active tabs,
-        // or just use a distinct color.
-        let color = isActive ? '#FFFFFF' : '#A0AEC0';
-        if (item.id === 'exit') {
-          color = '#FC8181'; // Reddish color for exit
-        }
-        return (
-          <TouchableOpacity 
-            key={item.id} 
-            style={[styles.navItem, isActive && styles.activeNavItem]} 
-            activeOpacity={0.7}
-            onPress={() => onNavPress && onNavPress(item.id)}
-          >
-            {item.type === 'ionicons' ? (
-              <Ionicons name={item.icon as any} size={28} color={color} />
-            ) : (
-              <MaterialIcons name={item.icon as any} size={28} color={color} />
-            )}
-            <Text style={[
-              styles.navLabel, 
-              isActive && styles.activeNavLabel,
-              item.id === 'exit' && { color: '#FC8181' }
-            ]}>{item.label}</Text>
-          </TouchableOpacity>
-        );
-      })}
+    <View style={styles.wrapper}>
+      {/* Top gold accent rule matching FeatureBar */}
+      <View style={styles.topRule} />
+      
+      <View style={styles.container}>
+        {navItems.map((item) => {
+          const isActive = activeId === item.id;
+          
+          // Use #4B5563 (Dark Gray) for much better contrast and premium readability
+          let iconColor = isActive ? '#FFFFFF' : '#4B5563'; 
+          let bgColor = isActive ? '#0D1F35' : 'transparent'; // Premium Navy for active pill
+
+          if (item.id === 'exit') {
+            iconColor = isActive ? '#FFFFFF' : '#EF4444'; // Use solid red for exit even when inactive for clarity
+            bgColor = isActive ? '#8E2828' : 'transparent';
+          }
+          return (
+            <TouchableOpacity 
+              key={item.id} 
+              style={[styles.navItem, { backgroundColor: bgColor }]} 
+              activeOpacity={0.6}
+              onPress={() => onNavPress && onNavPress(item.id)}
+            >
+              {item.type === 'ionicons' ? (
+                <Ionicons name={item.icon as any} size={24} color={iconColor} />
+              ) : (
+                <MaterialIcons name={item.icon as any} size={24} color={iconColor} />
+              )}
+              <Text style={[
+                styles.navLabel, 
+                isActive && styles.activeNavLabel,
+                !isActive && { color: iconColor }
+              ]}>{item.label}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: '#EAE6DF',
+    shadowColor: '#1A1A1A',
+    shadowOffset: { width: 0, height: -6 },
+    shadowOpacity: 0.04,
+    shadowRadius: 16,
+    elevation: 12,
+  },
+  topRule: {
+    height: 2,
+    backgroundColor: '#C9A96E',
+    opacity: 0.4,
+  },
   container: {
-    height: 90,
-    backgroundColor: '#0B2A4A', // Same as top header
+    height: 86,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 10, // Accounts for bottom safe area slightly
+    paddingHorizontal: 10,
+    paddingBottom: 8,
   },
   navItem: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
+    borderRadius: 16, // Pill shape
+    minWidth: 70,
   },
   navLabel: {
-    color: '#E2E8F0',
-    fontSize: 14,
-    fontWeight: '600',
-    marginTop: 6,
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 12, // Increased for better legibility
+    marginTop: 4,
+    letterSpacing: 0.2,
+  },
+  activeNavLabel: {
+    color: '#FFFFFF', // Selected text color inside navy pill
   },
 });

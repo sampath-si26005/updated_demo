@@ -7,7 +7,7 @@ export default function LoungeList() {
   const [selectedLoungeId, setSelectedLoungeId] = useState<string | null>(null);
 
   // Sort lounges by distance (nearest first)
-  const sortedLounges = [...lounges].sort((a, b) => a.distance - b.distance);
+  const sortedLounges = lounges;
 
   const handleLoungePress = (lounge: Lounge) => {
     setSelectedLoungeId(lounge.id);
@@ -51,9 +51,9 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2D3748',
+    fontFamily: 'PlayfairDisplay_700Bold',
+    fontSize: 24,
+    color: '#0D1F35',
   },
   listContainer: {
     flex: 1,

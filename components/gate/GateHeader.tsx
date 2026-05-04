@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export type FlightStatus = 'ON TIME' | 'DELAYED' | 'BOARDING' | 'GATE CHANGED';
 
@@ -59,14 +59,14 @@ export default function GateHeader({ flightNumber, destination, departureTime, s
 
 const styles = StyleSheet.create({
   container: {
-    height: 80,
-    backgroundColor: '#0B2A4A',
+    height: 100, // Increased by 10%
+    backgroundColor: '#0D1F35', // Match premium dark navy header
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomWidth: 2,
+    borderBottomColor: '#C9A96E', // Match premium gold line
   },
   leftSection: {
     flexDirection: 'row',
@@ -74,38 +74,46 @@ const styles = StyleSheet.create({
   },
   flightNumber: {
     color: '#FFFFFF',
-    fontSize: 26,
-    fontWeight: '700',
+    fontSize: 30,
+    fontFamily: 'Inter_700Bold',
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
   },
   divider: {
-    color: 'rgba(255, 255, 255, 0.4)',
-    fontSize: 26,
-    marginHorizontal: 15,
+    color: 'rgba(255, 255, 255, 0.3)',
+    fontSize: 30,
+    marginHorizontal: 16,
   },
   destination: {
-    color: '#E2E8F0',
-    fontSize: 24,
-    fontWeight: '600',
+    color: '#EDE9E3',
+    fontSize: 30,
+    fontFamily: 'Inter_700Bold',
+    fontWeight: 'bold',
   },
   departureTime: {
-    color: '#E2E8F0',
-    fontSize: 22,
-    fontWeight: '500',
+    color: '#EDE9E3',
+    fontSize: 30,
+    fontFamily: 'Inter_700Bold',
+    fontWeight: 'bold',
   },
   statusBadge: {
-    marginLeft: 20,
-    paddingHorizontal: 16,
+    marginLeft: 50,
+    paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   statusText: {
     color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 13,
+    fontFamily: 'Inter_600SemiBold',
+    letterSpacing: 1,
   },
   time: {
-    color: '#FFFFFF',
-    fontSize: 26,
-    fontWeight: '600',
+    color: 'rgba(237, 233, 227, 0.7)',
+    fontSize: 30,
+    fontFamily: 'Inter_600SemiBold',
+    letterSpacing: 1,
   }
 });

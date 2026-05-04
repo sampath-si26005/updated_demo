@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Lounge } from '../../../mock/lounges';
 
@@ -13,50 +13,32 @@ export default function LoungeCard({ lounge, isSelected, onPress }: LoungeCardPr
   return (
     <TouchableOpacity 
       style={[styles.card, isSelected && styles.cardSelected]} 
-      activeOpacity={0.7}
+      activeOpacity={0.8}
       onPress={onPress}
     >
-      <View style={styles.headerRow}>
-        <Text style={styles.name}>{lounge.name}</Text>
-        <Text style={styles.distance}>{lounge.distance}m</Text>
-      </View>
-
-      <View style={styles.detailsRow}>
-        <View style={styles.badgeContainer}>
-          <View style={[
-            styles.statusBadge,
-            lounge.status === 'open' ? styles.statusOpen : styles.statusClosed
-          ]}>
-            <Text style={[
-              styles.statusText,
-              lounge.status === 'open' ? styles.textOpen : styles.textClosed
+      {lounge.imageUrl && (
+        <Image source={{ uri: lounge.imageUrl }} style={styles.itemImage} resizeMode="cover" />
+      )}
+      <View style={styles.imageOverlay} />
+      
+      <View style={styles.itemContentOverlay}>
+        <View style={styles.itemHeader}>
+          <Text style={styles.itemName}>{lounge.name}</Text>
+          <Text style={styles.itemDistance}>{lounge.distance}</Text>
+        </View>
+        
+        <View style={styles.itemFooterRow}>
+          <Text style={styles.itemCategory}>{lounge.category}</Text>
+          <View style={styles.badgeContainer}>
+            <View style={[
+              styles.statusBadge,
+              lounge.status === 'Open' ? styles.statusOpen : 
+              lounge.status === 'Closing Soon' ? styles.statusClosing : styles.statusClosed
             ]}>
-              {lounge.status.toUpperCase()}
-            </Text>
-          </View>
-          <View style={styles.accessBadge}>
-            <Text style={styles.accessText}>{lounge.access.toUpperCase()}</Text>
+              <Text style={styles.statusText}>{lounge.status}</Text>
+            </View>
           </View>
         </View>
-      </View>
-
-      <View style={styles.amenitiesContainer}>
-        {lounge.amenities.map((amenity, index) => (
-          <View key={index} style={styles.amenityChip}>
-            <Ionicons 
-              name={
-                amenity === 'wifi' ? 'wifi' : 
-                amenity === 'food' || amenity === 'snacks' ? 'restaurant' : 
-                amenity === 'shower' ? 'water' : 'star'
-              } 
-              size={12} 
-              color="#4A5568" 
-            />
-            <Text style={styles.amenityText}>
-              {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
-            </Text>
-          </View>
-        ))}
       </View>
     </TouchableOpacity>
   );
@@ -64,93 +46,84 @@ export default function LoungeCard({ lounge, isSelected, onPress }: LoungeCardPr
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#F7FAFC',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderRadius: 16,
+    marginBottom: 16,
+    overflow: 'hidden',
+    height: 200,
+    backgroundColor: '#000',
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   cardSelected: {
-    borderColor: '#3182CE',
-    backgroundColor: '#EBF8FF',
+    borderColor: '#C9A96E',
   },
-  headerRow: {
+  itemImage: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.85,
+  },
+  imageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  itemContentOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 16,
+  },
+  itemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 8,
+    alignItems: 'baseline',
+    marginBottom: 4,
   },
-  name: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2D3748',
+  itemName: {
+    fontFamily: 'PlayfairDisplay_700Bold',
+    fontSize: 22,
+    color: '#FFFFFF',
     flex: 1,
-    marginRight: 8,
+    marginRight: 10,
   },
-  distance: {
-    fontSize: 14,
-    color: '#718096',
-    fontWeight: '600',
+  itemDistance: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 12,
+    color: '#E2E8F0',
   },
-  detailsRow: {
+  itemFooterRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+  },
+  itemCategory: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: '#CBD5E0',
   },
   badgeContainer: {
     flexDirection: 'row',
     gap: 8,
   },
   statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  statusOpen: {
-    backgroundColor: '#C6F6D5',
-  },
-  statusClosed: {
-    backgroundColor: '#FED7D7',
-  },
-  statusText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
-  textOpen: {
-    color: '#22543D',
-  },
-  textClosed: {
-    color: '#822727',
-  },
-  accessBadge: {
-    backgroundColor: '#EDF2F7',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  accessText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: '#4A5568',
-  },
-  amenitiesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-  },
-  amenityChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#E2E8F0',
-    paddingHorizontal: 6,
+    paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
-    gap: 4,
+    backgroundColor: 'rgba(255,255,255,0.15)',
   },
-  amenityText: {
+  statusOpen: {
+    backgroundColor: 'rgba(72, 187, 120, 0.25)',
+  },
+  statusClosing: {
+    backgroundColor: 'rgba(237, 137, 54, 0.25)',
+  },
+  statusClosed: {
+    backgroundColor: 'rgba(245, 101, 101, 0.25)',
+  },
+  statusText: {
+    fontFamily: 'Inter_700Bold',
     fontSize: 10,
-    color: '#4A5568',
-    fontWeight: '500',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
 });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import PageLayout from '../components/landing_page/PageLayout';
 import GateHeader, { FlightStatus } from '../components/gate/GateHeader';
 import GateMainContent, { GateState, GateStatusType } from '../components/gate/GateMainContent';
@@ -10,8 +11,12 @@ export default function GateScreen() {
   const params = useLocalSearchParams();
   const router = useRouter();
   const defaultFlightNumber = Array.isArray(params.flightNo) ? params.flightNo[0] : (params.flightNo || "6E 123");
-  const defaultDestination = Array.isArray(params.destination) ? params.destination[0] : (params.destination || "Goa");
+  const defaultDestination = Array.isArray(params.destination) ? params.destination[0] : (params.destination || "London");
   const defaultDepartureTime = Array.isArray(params.departure) ? params.departure[0] : (params.departure || "14:45");
+  const airline = Array.isArray(params.airline) ? params.airline[0] : (params.airline || "IndiGo");
+  const origin = Array.isArray(params.origin) ? params.origin[0] : (params.origin || "Chennai");
+  const passenger = Array.isArray(params.passenger) ? params.passenger[0] : (params.passenger || "JANE DOE");
+  const date = Array.isArray(params.date) ? params.date[0] : (params.date || "JAN 25, 2025");
 
   const [gateState, setGateState] = useState<GateState>('loading');
   const [flightStatus, setFlightStatus] = useState<FlightStatus>('ON TIME');
@@ -72,18 +77,28 @@ export default function GateScreen() {
         gateNumber={gateNumber}
       />
       
-      <View style={styles.mainContainer}>
+      <LinearGradient 
+        colors={['#FCFAF8', '#EBE6DF']} 
+        style={styles.mainContainer}
+      >
         <GateMainContent 
           state={gateState}
           gateStatus={gateStatusType}
           gateNumber={gateNumber}
           previousGateNumber={prevGateNumber}
+          flightNumber={defaultFlightNumber}
+          destination={defaultDestination}
+          departureTime={defaultDepartureTime}
+          airline={airline}
+          origin={origin}
+          passenger={passenger}
+          date={date}
         />
         
         {gateState === 'gate_announced' && (
           <GateAction onPress={handleStartNavigation} />
         )}
-      </View>
+      </LinearGradient>
     </PageLayout>
   );
 }
@@ -91,6 +106,6 @@ export default function GateScreen() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#F5F7FA', // Light greyish background to match app style
+    // Background color handled by LinearGradient
   }
 });

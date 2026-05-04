@@ -1,3 +1,6 @@
+/**
+ * PageLayout.tsx — Warm off-white shell.
+ */
 import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import Header from './Header';
@@ -9,8 +12,8 @@ interface PageLayoutProps {
 
 export default function PageLayout({ children, hideHeader = false }: PageLayoutProps) {
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0B2A4A" />
+    <View style={styles.root}>
+      <StatusBar barStyle="light-content" backgroundColor="#0D1F35" />
       {!hideHeader && <Header />}
       {children}
     </View>
@@ -18,8 +21,8 @@ export default function PageLayout({ children, hideHeader = false }: PageLayoutP
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#F4F1EC',
   },
 });

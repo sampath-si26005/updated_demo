@@ -1,6 +1,6 @@
 import React from 'react';
-import FeatureBar from '../components/landing_page/FeatureBar';
 import MainSection from '../components/landing_page/MainSection';
+import FeatureBar from '../components/landing_page/FeatureBar';
 import PageLayout from '../components/landing_page/PageLayout';
 
 export default function LandingPage() {

@@ -1,9 +1,11 @@
 /**
- * FeatureBar.tsx
- * 
- * This component displays a horizontal bar or row of quick feature 
- * shortcuts (like Shops, Dining, Gates). It provides users with 
- * 1-tap access to primary map categories.
+ * FeatureBar.tsx — Premium bottom bar.
+ * FUNCTIONALITY UNCHANGED:
+ *   - "How it works" → opens HowItWorksSection modal
+ *   - "About" → opens AboutSection modal
+ *   - "Features" → opens WhySmartTrolley modal
+ *   - "24/7 assistance" → non-interactive (display only)
+ * Only visual style elevated.
  */
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Modal } from 'react-native';
@@ -13,10 +15,10 @@ import AboutSection from './AboutSection';
 import WhySmartTrolley from './WhySmartTrolley';
 
 const features = [
-  { icon: 'help-circle-outline', text: 'How it works', id: 'how' },
-  { icon: 'information-circle-outline', text: 'About', id: 'about' },
-  { icon: 'grid-outline', text: 'Features', id: 'why' }, // Rewired 'Real-time updates' to show the new component
-  { icon: 'headset-outline', text: '24/7 assistance', id: null },
+  { icon: 'help-circle-outline' as const,        text: 'How it works',   id: 'how'   },
+  { icon: 'information-circle-outline' as const,  text: 'About',          id: 'about' },
+  { icon: 'grid-outline' as const,               text: 'Features',       id: 'why'   },
+  { icon: 'headset-outline' as const,            text: '24/7 assistance', id: null    },
 ];
 
 export default function FeatureBar() {
@@ -25,40 +27,56 @@ export default function FeatureBar() {
   return (
     <>
       <View style={styles.container}>
-        {features.map((item, index) => {
-          const isButton = item.id !== null;
-          const ContainerComponent = isButton ? Pressable : View;
-          
-          return (
-            <ContainerComponent 
-              key={index} 
-              style={[styles.featureItem, isButton && styles.interactiveItem]}
-              // @ts-ignore
-              onPress={isButton ? () => setActiveModal(item.id as any) : undefined}
-            >
-              <Ionicons name={item.icon as any} size={32} color="#2F6FED" />
-              <Text style={styles.featureText}>{item.text}</Text>
-            </ContainerComponent>
-          );
-        })}
+        {/* Top gold accent rule */}
+        <View style={styles.topRule} />
+
+        <View style={styles.row}>
+          {features.map((item, index) => {
+            const isClickable = item.id !== null;
+            const isLast = index === features.length - 1;
+
+            return (
+              <React.Fragment key={index}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.item,
+                    isClickable && pressed && styles.itemPressed,
+                  ]}
+                  onPress={isClickable ? () => setActiveModal(item.id as any) : undefined}
+                >
+                  <View style={styles.iconWrap}>
+                    <Ionicons
+                      name={item.icon}
+                      size={22}
+                      color={isClickable ? '#0D1F35' : '#9CA3AF'}
+                    />
+                  </View>
+                  <Text style={[styles.label, !isClickable && styles.labelMuted]}>
+                    {item.text}
+                  </Text>
+                </Pressable>
+
+                {/* Vertical separator */}
+                {!isLast && <View style={styles.sep} />}
+              </React.Fragment>
+            );
+          })}
+        </View>
       </View>
 
+      {/* ── Modals (unchanged functionality) ─────────────────── */}
       <Modal
         animationType="slide"
         visible={activeModal !== null}
         onRequestClose={() => setActiveModal(null)}
       >
-        <View style={styles.modalFullScreen}>
-          {activeModal === 'how' && <HowItWorksSection />}
+        <View style={styles.modalScreen}>
+          {activeModal === 'how'   && <HowItWorksSection />}
           {activeModal === 'about' && <AboutSection />}
-          {activeModal === 'why' && <WhySmartTrolley />}
+          {activeModal === 'why'   && <WhySmartTrolley />}
 
-          {/* Floating close button */}
-          <Pressable 
-            style={styles.closeFloat} 
-            onPress={() => setActiveModal(null)}
-          >
-            <Ionicons name="close-circle" size={56} color="#2F6FED" />
+          <Pressable style={styles.closeBtn} onPress={() => setActiveModal(null)}>
+            <Ionicons name="close-circle" size={52} color="#0D1F35" />
           </Pressable>
         </View>
       </Modal>
@@ -68,45 +86,75 @@ export default function FeatureBar() {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    height: 100,
-    backgroundColor: '#F5F9FF', 
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingHorizontal: 20,
+    backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0', 
+    borderTopColor: '#EAE6DF',
+    shadowColor: '#1A1A1A',
+    shadowOffset: { width: 0, height: -6 },
+    shadowOpacity: 0.04,
+    shadowRadius: 16,
+    elevation: 12,
   },
-  featureItem: {
+  topRule: {
+    height: 2,
+    backgroundColor: '#C9A96E',
+    opacity: 0.4,
+  },
+  row: {
+    height: 86,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
-  interactiveItem: {
-    paddingVertical: 12,
+    justifyContent: 'space-around',
     paddingHorizontal: 20,
-    backgroundColor: 'rgba(47, 111, 237, 0.1)', 
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(47, 111, 237, 0.2)',
   },
-  featureText: {
-    color: '#0A1F44', 
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  modalFullScreen: {
+  item: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    height: '100%',
+    paddingHorizontal: 8,
   },
-  closeFloat: {
+  itemPressed: {
+    opacity: 0.55,
+  },
+  iconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: '#F4F1EC',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  label: {
+    fontFamily: 'Inter_600SemiBold',
+    color: '#0D1F35',
+    fontSize: 15,
+    letterSpacing: 0.1,
+  },
+  labelMuted: {
+    color: '#9CA3AF',
+  },
+  sep: {
+    width: 1,
+    height: 30,
+    backgroundColor: '#E5E0D8',
+  },
+
+  /* Modal */
+  modalScreen: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  closeBtn: {
     position: 'absolute',
-    top: 40,
-    right: 40,
+    top: 36,
+    right: 36,
     zIndex: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
   },
 });

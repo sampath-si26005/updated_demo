@@ -1,121 +1,203 @@
 /**
- * MainSection.tsx
- * 
- * This is the primary landing hero section of the application.
- * It prompts the user to scan their boarding pass to start navigation
- * and features a large, prominent call-to-action button.
+ * MainSection.tsx — Premium hero. Image left, content right.
+ * FUNCTIONALITY UNCHANGED: "Start Now" → router.push('/scanner')
+ * Only visual polish applied.
  */
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import {
+  View, Text, StyleSheet, Pressable, Image, Animated, Easing,
+} from 'react-native';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const images = [
-  'https://images.unsplash.com/photo-1512314889357-e157c22f938d?q=80&w=2070&auto=format&fit=crop', // Lounge / Relaxing
-  'https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=2070&auto=format&fit=crop', // Shopping / Duty Free
-  'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2070&auto=format&fit=crop', // Food / Cafe
-];
+function useFadeIn(delay = 0) {
+  const opacity    = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(16)).current;
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(opacity,    { toValue: 1, duration: 800, delay, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+      Animated.timing(translateY, { toValue: 0, duration: 800, delay, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+    ]).start();
+  }, []);
+  return { opacity, transform: [{ translateY }] };
+}
 
 export default function MainSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const fadeAnim = React.useRef(new Animated.Value(1)).current;
   const router = useRouter();
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 0.1,
-        duration: 400,
-        useNativeDriver: true,
-      }).start(() => {
-        setCurrentIndex((prev) => (prev + 1) % images.length);
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 600,
-          useNativeDriver: true,
-        }).start();
-      });
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [fadeAnim]);
+  const imgAnim  = useFadeIn(0);
+  const txtAnim  = useFadeIn(240);
+  const ctaAnim  = useFadeIn(440);
 
   return (
     <View style={styles.container}>
-      {/* 60% Width Left Column - Carousel */}
-      <View style={styles.leftColumn}>
-        <Animated.Image
-          source={{ uri: images[currentIndex] }}
-          style={[styles.carouselImage, { opacity: fadeAnim }]}
-        />
-      </View>
 
-      {/* 40% Width Right Column - Content */}
-      <View style={styles.rightColumn}>
-        <View style={styles.contentWrapper}>
-          <Text style={styles.headline}>Take this Smart Trolley for Free</Text>
-          <Text style={styles.subtext}>Get real-time flight updates and navigation</Text>
-          <Pressable 
-            style={({ pressed }) => [styles.button, pressed && { opacity: 0.8 }]}
+      {/* ── LEFT: Image ─────────────────────────────────────────── */}
+      <Animated.View style={[styles.leftCol, imgAnim]}>
+        <View style={styles.imgShadow}>
+          <View style={styles.imgClip}>
+            <Image
+              source={require('../../assets/images/hero_lounge.png')}
+              style={styles.img}
+            />
+          </View>
+        </View>
+      </Animated.View>
+
+      {/* ── RIGHT: Content ──────────────────────────────────────── */}
+      <View style={styles.rightCol}>
+
+        <Animated.View style={txtAnim}>
+          {/* Eyebrow Removed */}
+
+          {/* Headline — Playfair Display serif */}
+          <Text style={styles.headline}>
+            Navigate Your{'\n'}
+            <Text style={styles.headlineItalic}>Airport Smarter</Text>
+          </Text>
+
+          {/* Body */}
+          <Text style={styles.body}>
+            Real-time flight updates, premium food,{'\n'}
+            luxury shopping &amp; seamless navigation.
+          </Text>
+        </Animated.View>
+
+        {/* ── CTA: "Start Now" — SAME functionality as original ── */}
+        <Animated.View style={ctaAnim}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.ctaWrap,
+              pressed && styles.ctaPressed,
+            ]}
             onPress={() => router.push('/scanner')}
           >
-            <Text style={styles.buttonText}>Start Now</Text>
+            <LinearGradient
+              colors={['#1E3A5F', '#0D1F35']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.ctaGradient}
+            >
+              <Text style={styles.ctaText}>Start Now</Text>
+              <View style={styles.ctaArrowCircle}>
+                <Text style={styles.ctaArrow}>→</Text>
+              </View>
+            </LinearGradient>
           </Pressable>
-        </View>
+        </Animated.View>
+
       </View>
     </View>
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row', // Split Layout
+    flexDirection: 'row',
+    backgroundColor: '#F4F1EC',
+    paddingHorizontal: 40,
+    paddingTop: 36,
+    paddingBottom: 28,
+    gap: 44,
   },
-  leftColumn: {
-    flex: 6, // 60%
-    backgroundColor: '#E8F1FF',
+
+  /* Left */
+  leftCol: {
+    flex: 55,
+    paddingTop: 20,
   },
-  carouselImage: {
+  imgShadow: {
+    flex: 1,
+    borderRadius: 10,
+    shadowColor: '#2C1F0E',
+    shadowOffset: { width: 4, height: 20 },
+    shadowOpacity: 0.15,
+    shadowRadius: 36,
+    elevation: 12,
+    backgroundColor: '#F4F1EC',
+  },
+  imgClip: {
+    flex: 1,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  img: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
   },
-  rightColumn: {
-    flex: 4, // 40%
-    backgroundColor: '#ffffff',
+
+  /* Right */
+  rightCol: {
+    flex: 45,
     justifyContent: 'center',
-    paddingHorizontal: 40,
+    paddingLeft: 12,
+    paddingBottom: 16,
   },
-  contentWrapper: {
-    alignItems: 'flex-start',
-    width: '100%',
-  },
+
+  /* Headline */
   headline: {
-    color: '#0A1F44', // Dark blue Chennai airport contrast
-    fontSize: 52,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontFamily: 'PlayfairDisplay_700Bold',
+    color: '#0D1F35',
+    fontSize: 54,
     lineHeight: 60,
+    marginBottom: 20,
   },
-  subtext: {
-    color: '#4B5563',
-    fontSize: 26,
+  headlineItalic: {
+    fontFamily: 'PlayfairDisplay_700Bold',
+    color: '#0D1F35',
+    fontStyle: 'italic',
+  },
+
+  /* Body */
+  body: {
+    fontFamily: 'Inter_400Regular',
+    color: '#5C6370',
+    fontSize: 16,
+    lineHeight: 26,
     marginBottom: 40,
   },
-  button: {
-    backgroundColor: '#2F6FED', // Blue CTA
-    paddingVertical: 20,
-    paddingHorizontal: 54,
-    borderRadius: 50,
-    elevation: 6,
-    shadowColor: '#2F6FED',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
+
+  /* CTA — refined navy (same onPress functionality) */
+  ctaWrap: {
+    alignSelf: 'flex-start',
+    borderRadius: 8,
+    shadowColor: '#0D1F35',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    elevation: 8,
   },
-  buttonText: {
-    color: '#ffffff',
-    fontSize: 26,
-    fontWeight: 'bold',
+  ctaPressed: {
+    transform: [{ translateY: -2 }],
+    shadowOpacity: 0.35,
+  },
+  ctaGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 36,
+    borderRadius: 8,
+  },
+  ctaText: {
+    fontFamily: 'Inter_600SemiBold',
+    color: '#EDE9E3',
+    fontSize: 17,
+    letterSpacing: 0.3,
+  },
+  ctaArrowCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(201, 169, 110, 0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ctaArrow: {
+    color: '#C9A96E',
+    fontSize: 14,
   },
 });

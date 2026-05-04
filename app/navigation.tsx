@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import PageLayout from '../components/landing_page/PageLayout';
 import GateHeader, { FlightStatus } from '../components/gate/GateHeader';
 import MapView from '../components/navigation/MapView';
-import ShopList from '../components/navigation/ShopList';
+import PromotionList from '../components/navigation/promotions/PromotionList';
 import RestroomList from '../components/navigation/restrooms/RestroomList';
 import FoodPreviewList from '../components/navigation/food/FoodPreviewList';
 import ShoppingPreviewList from '../components/navigation/shopping/ShoppingPreviewList';
@@ -47,7 +47,7 @@ export default function NavigationScreen() {
              activeTab === 'shopping' ? <ShoppingPreviewList /> : 
              activeTab === 'lounges' ? <LoungeList /> : 
              activeTab === 'help' ? <HelpDeskList /> : 
-             <ShopList />}
+             <PromotionList />}
           </View>
         </View>
       </View>
